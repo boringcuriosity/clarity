@@ -1,27 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "dist/index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/dist/public/assets/$1"
-    },
-    {
-      "src": "/(favicon\\.ico|robots\\.txt)",
-      "dest": "/dist/public/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/dist/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/index.js"
-    }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/assets/(.*)", "destination": "/public/assets/$1" },
+    { "source": "/(favicon\\.ico|robots\\.txt)", "destination": "/public/$1" },
+    { "source": "/api/(.*)", "destination": "/index.js" },
+    { "source": "/(.*)", "destination": "/index.js" }
   ]
 }
