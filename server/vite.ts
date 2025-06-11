@@ -68,14 +68,26 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(import.meta.dirname, "..", "dist", "public");
-
-  if (!fs.existsSync(distPath)) {
-    throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`,
-    );
+  // Use a more reliable method to resolve paths in different environments
+  // For local development
+  let distPath = path.resolve(import.meta.dirname, "..", "dist", "public");
+  
+  // For Vercel or other serverless environments
+  if (process.env.VERCEL) {
+    // In Vercel, the root directory is the project root
+    distPath = path.resolve(process.cwd(), "dist", "public");
+    log(`Using Vercel path resolution: ${distPath}`, "static");
   }
 
+  log(`Attempting to serve static files from: ${distPath}`, "static");
+
+  if (!fs.existsSync(distPath)) {
+    const errorMsg = `Could not find the build directory: ${distPath}, make sure to build the client first`;
+    log(`ERROR: ${errorMsg}`, "static");
+    throw new Error(errorMsg);
+  }
+
+  log(`Static directory found, serving files from: ${distPath}`, "static");
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist
