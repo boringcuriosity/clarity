@@ -19,6 +19,13 @@ export function useChat() {
     setShowWelcome(false);
   }, []);
 
+  const clearChat = useCallback(() => {
+    setMessages([]);
+    setHistory([]);
+    setShowWelcome(true);
+    setError(null);
+  }, []);
+
   const addMessage = useCallback((text: string, sender: "user" | "bot", isError = false) => {
     const newMessage: Message = {
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
@@ -67,7 +74,10 @@ export function useChat() {
       }
 
       const data = await response.json();
-      const botReply = data.response || 'I apologize, but I encountered an issue processing your request.';
+      let botReply = data.response || 'I apologize, but I encountered an issue processing your request.';
+      
+      // Clean up the response formatting - remove excessive newlines and format properly
+      botReply = botReply.trim().replace(/\n{3,}/g, '\n\n');
 
       // Add bot response
       addMessage(botReply, "bot");
@@ -93,12 +103,24 @@ export function useChat() {
     }
   }, [isTyping, showWelcome, history, addMessage, toast]);
 
+  const retryLastMessage = useCallback(() => {
+    if (messages.length === 0) return;
+    
+    // Find the last user message
+    const lastUserMessage = [...messages].reverse().find(msg => msg.sender === "user");
+    if (lastUserMessage) {
+      sendMessage(lastUserMessage.text);
+    }
+  }, [messages, sendMessage]);
+
   return {
     messages,
     isTyping,
     sendMessage,
     showWelcome,
     hideWelcome,
+    clearChat,
+    retryLastMessage,
     error
   };
 }
