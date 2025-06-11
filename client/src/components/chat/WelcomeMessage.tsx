@@ -32,10 +32,7 @@ export function WelcomeMessage({ onQuickAction }: WelcomeMessageProps) {
   return (
     <div className="p-6 bg-gradient-to-b from-secondary to-background border-b border-border">
       <div className="text-center max-w-2xl mx-auto">
-        <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Handshake className="w-8 h-8 text-primary" />
-        </div>
-        <h2 className="text-xl font-semibold text-[var(--text-main)] mb-2">
+        <h2 className="text-3xl font-semibold text-[var(--text-main)] mb-2">
           Welcome to Clarity!
         </h2>
         <p className="text-muted-foreground mb-6">
