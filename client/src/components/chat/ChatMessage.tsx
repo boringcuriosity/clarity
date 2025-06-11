@@ -70,7 +70,7 @@ export function ChatMessage({ message, onRetry }: ChatMessageProps) {
       isUser ? "justify-end" : "justify-start"
     )}>
       {!isUser && (
-        <div className="flex items-start space-x-3">
+        <div className="flex items-start space-x-3 group">
           <div className={cn(
             "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
             message.isError 

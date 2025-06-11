@@ -14,6 +14,8 @@ export default function Chat() {
     sendMessage,
     showWelcome,
     hideWelcome,
+    clearChat,
+    retryLastMessage,
     error
   } = useChat();
   
@@ -34,7 +36,10 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <ChatHeader />
+      <ChatHeader 
+        onClearChat={clearChat}
+        hasMessages={messages.length > 0}
+      />
       
       <main className="flex-1 overflow-hidden">
         <div className="max-w-4xl mx-auto h-full flex flex-col">
@@ -48,6 +53,7 @@ export default function Chat() {
                 <ChatMessage
                   key={message.id}
                   message={message}
+                  onRetry={message.sender === "bot" ? retryLastMessage : undefined}
                 />
               ))}
               
